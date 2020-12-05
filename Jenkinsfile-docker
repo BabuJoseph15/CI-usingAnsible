@@ -41,7 +41,8 @@ pipeline {
     }
      
         stage('Run docker container') {
-            
+           def dockerRun = 'docker run -d --name samplewebapp -p 8082:8082 babujoseph5757/sampleapp:latest'
+	   sshagent(['dev-server']) {
             steps {
                 sh 'docker run -d --name samplewebapp -p 8082:8082 babujoseph5757/sampleapp:latest'
             }
