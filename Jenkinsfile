@@ -8,7 +8,7 @@ pipeline {
       stage('SCM checkout') {
            steps {   
                script {
-                   git 'https://github.com/BabuJoseph15/hello-world.git'
+                   git 'https://github.com/BabuJoseph15/CI-usingAnsible.git'
                }    
            }
         }
