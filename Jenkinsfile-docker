@@ -20,38 +20,32 @@ pipeline {
           }
         }
         
-
   stage('Build Docker Image') {
            steps {
               
                 sh 'docker build -t babujoseph5757samplewebapp:latest .' 
                 sh 'docker tag samplewebapp babujoseph5757/samplewebapp:latest'
-                //sh 'docker tag samplewebapp babujoseph5757/samplewebapp:$BUILD_NUMBER'
-               
+                //sh 'docker tag samplewebapp babujoseph5757/samplewebapp:$BUILD_NUMBER'   
           }
         }
      
   stage('Push Docker Image') {
       steps {
-    withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
-      sh "docker login -u babujoseph5757 -p ${dockerHubPwd}"
-   }
-   sh  'docker push babujoseph5757/samplewebapp:latest'       
-           
+        withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
+          sh "docker login -u babujoseph5757 -p ${dockerHubPwd}"
         }
+          sh  'docker push babujoseph5757/samplewebapp:latest'       
+           
+     }
                   
-      }
- }
+   }
+}
      
- stage('Run Docker container on remote hosts') {
-   sshagent(['dev-server']) {
-     sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.47.98
-    // some block
-}          
+stage('Run docker container') {
             steps {
-                sh docker -H ssh://ec2-user@172.31.47.98 run -d -p 8080:8080 babujoseph5757/samplewebapp:latest
- 
+                sh 'docker run -d --name samplewebapp -p 8082:8082 babujoseph5757/sampleapp:latest'
             }
+        
         }
     }
 }
