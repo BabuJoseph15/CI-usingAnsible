@@ -11,42 +11,41 @@ pipeline {
              
                 git branch: 'master', url: 'https://github.com/BabuJoseph15/CI-usingAnsible.git'
              
-          }
+           }
         }
-	 stage('Mvn package') {
+	  stage('Mvn package') {
            steps {
              
                 sh 'mvn clean package'             
-          }
+            }
         }
         
-  stage('Build Docker Image') {
+      stage('Build Docker Image') {
            steps {
               
                 sh 'docker build -t babujoseph5757samplewebapp:latest .' 
                 sh 'docker tag samplewebapp babujoseph5757/samplewebapp:latest'
                 //sh 'docker tag samplewebapp babujoseph5757/samplewebapp:$BUILD_NUMBER'   
-          }
+            }
         }
-     
-  stage('Push Docker Image') {
-      steps {
-        withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
-          sh "docker login -u babujoseph5757 -p ${dockerHubPwd}"
-        }
-          sh  'docker push babujoseph5757/samplewebapp:latest'       
+      stage('Push Docker Image') {
+      
+           steps {
+          
+            withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
+                sh "docker login -u babujoseph5757 -p ${dockerHubPwd}"
+            }
+            sh  'docker push babujoseph5757/samplewebapp:latest'       
            
-     }
+        }
                   
-   }
-}
+    }
      
-stage('Run docker container') {
+        stage('Run docker container') {
+            
             steps {
                 sh 'docker run -d --name samplewebapp -p 8082:8082 babujoseph5757/sampleapp:latest'
             }
         
         }
     }
-}
-    
