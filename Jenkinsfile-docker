@@ -41,10 +41,11 @@ pipeline {
     }
      
         stage('Run docker container') {
-           def dockerRun = 'docker run -d --name samplewebapp -p 8082:8082 babujoseph5757/sampleapp:latest'
-	   sshagent(['dev-server']) {
-            steps {
-                sh 'docker run -d --name samplewebapp -p 8082:8082 babujoseph5757/sampleapp:latest'
+	   steps {
+	   
+	      def dockerRun = 'docker run -d --name samplewebapp -p 8082:8082 babujoseph5757/sampleapp:latest'
+	      sshagent(['dev-server']) {
+                sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.47.98 ${dockerRun}'
             }
         
         }
