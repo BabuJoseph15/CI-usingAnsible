@@ -43,11 +43,7 @@ pipeline {
         stage('Run container on dev server') {
 	
 	   steps {
-	   
-	      sshagent(['dev-server']) {
-	        sh 'ssh -tt ec2-user@172.31.47.98'
-	      }
-	      sh 'docker run -d -p 8083:8083 -name samplewebapp babujoseph5757/samplewebapp:latest'
+	      sh 'docker -H ssh://ec2-user@172.31.47.98 run -d -p 8090:8090 -name samplewebapp babujoseph5757/samplewebapp:latest'
 	     
             }
         
