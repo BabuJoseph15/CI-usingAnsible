@@ -1,56 +1,45 @@
 pipeline {
     agent any
-    
     tools
     {
-       maven "Maven"
+       maven "maven3"
     }
-     
     stages {
-      stage('checkout') {
-           steps {
-             
-                git branch: 'master', url: 'https://github.com/devops4solutions/CI-example.git'
-             
-          }
+      stage('SCM checkout') {
+           steps {   
+               script {
+                   git 'https://github.com/BabuJoseph15/hello-world.git'
+               }    
+           }
         }
-         stage('Tools Init') {
+        
+        stage('Tools Init') {
             steps {
                 script {
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
-               def tfHome = tool name: 'Ansible'
+               def tfHome = tool name: 'ansible'
                 env.PATH = "${tfHome}:${env.PATH}"
                  sh 'ansible --version'
                     
             }
             }
         }
-     
         
-         stage('Execute Maven') {
+         stage('package') {
            steps {
-             
-                sh 'mvn package'             
-          }
+               script {
+                   sh 'mvn clean package'
+               }
+           }
         }
         
-        
-         
-        
-        
-        
-        stage('Ansible Deploy') {
-             
+     stage('Ansible Deploy') {  
             steps {
-                 
-             
-               
-               sh "ansible-playbook main.yml -i inventories/dev/hosts --user jenkins --key-file ~/.ssh/id_rsa"
-
-               
-            
-            }
-        }
-    }
+                script {
+             sh "ansible-playbook copyfile.yml -i dev.inv --user ansadmin --key-file ~/.ssh/id_rsa"
+         }        
+}
+}
+}
 }
