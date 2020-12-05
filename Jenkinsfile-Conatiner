@@ -8,16 +8,16 @@ node{
      sh "${mvnCMD} clean package"
    }
    stage('Build Docker Image'){
-     sh 'docker build -t babujoseph5757/samplewebapp:2.0.0 .'
+     sh 'docker build -t babujoseph5757/samplewebapp:latest .'
    }
    stage('Push Docker Image'){
      withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
         sh "docker login -u babujoseph5757 -p ${dockerHubPwd}"
      }
-     sh 'docker push babujoseph5757/samplewebapp:2.0.0'
+     sh 'docker push babujoseph5757/samplewebapp:latest'
    }
    stage('Run Container on Dev Server'){
-     def dockerRun = 'docker run -p 8090:8090 -d --name samplewebapp babujoseph5757/samplewebapp:2.0.0'
+     def dockerRun = 'docker run -p 8090:8090 -d --name samplewebapp babujoseph5757/samplewebapp:latest'
      sshagent(['Dev-Server']) {
        sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.3.11 ${dockerRun}"
      }
