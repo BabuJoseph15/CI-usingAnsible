@@ -1,9 +1,11 @@
         
-- hosts: all
+---
+-
   become: true
-  become_user: root
-  gather_facts: false
+  hosts: webservers
   tasks:
-    - include_role:
-        name: tomcat
-      
+    -
+      copy:
+        dest: /opt/tomcat8/webapps/
+        src: /var/lib/jenkins/workspace/Loginwebapp-Pipeline/webapp/target/LoginWebApp-1.war
+      name: "copy war onto tomcat server"
