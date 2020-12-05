@@ -47,7 +47,7 @@ pipeline {
 	      sshagent(['dev-server']) {
 	        sh 'ssh -t -o StrictHostKeyChecking=no ec2-user@172.31.47.98'
 	      }
-	      sh 'docker run -d -p 8082:8082 -name samplewebapp babujoseph5757/samplewebapp:latest'
+	      sh 'docker run -d -p 8083:8083 -name samplewebapp babujoseph5757/samplewebapp:latest'
 	     
             }
         
