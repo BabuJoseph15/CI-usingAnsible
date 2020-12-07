@@ -22,7 +22,7 @@ pipeline {
                 env.PATH = "${tfHome}:${env.PATH}"
                  sh 'ansible --version'
                     
-            }
+               }
             }
         }
         
